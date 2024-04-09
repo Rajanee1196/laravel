@@ -13,22 +13,36 @@ class productController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        
+    { 
+       
+
 
         //$data = product::latest()->paginate(5);
         $data=product::simplePaginate(5);
-        //print_r($data);exit;
+
 
         return view('index', compact('data'));
     }
-     public function searchfun(Request $request)
+     public function searchdata(Request $request)
     {
-        echo "hello";exit;
-        $data = User::select("title")
-                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')
-                    ->get();
      
+        $data = product::select("*")
+                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')->orWhere('author', 'LIKE', '%'. $request->get('query'). '%')
+                    ->get();
+     echo "<pre>";
+     print_r($data);exit;
+
+
+          return view('searchdata', compact('data'));
+    }
+
+ 
+     public function autocomplete(Request $request)
+    {
+     
+         $data = product::select("*")
+                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')->orWhere('author', 'LIKE', '%'. $request->get('query'). '%')
+                    ->get();
         return response()->json($data);
     }
 
