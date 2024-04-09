@@ -22,6 +22,15 @@ class productController extends Controller
 
         return view('index', compact('data'));
     }
+     public function searchfun(Request $request)
+    {
+        echo "hello";exit;
+        $data = User::select("title")
+                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')
+                    ->get();
+     
+        return response()->json($data);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -102,6 +111,7 @@ class productController extends Controller
      */
     public function destroy(product $product)
     {
-        //
+         $product->delete();
+        return redirect()->route('product.index')->with('success','product has been deleted successfully');
     }
 }
