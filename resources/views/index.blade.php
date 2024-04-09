@@ -25,14 +25,20 @@
             </div>
         @endif
                      <div class="col px-1">
-                                                <input type="search" class="form-control w-100" placeholder="Search..."
-                                                    name="s_query" id="s_query" value="">
+                                                <input type="search" class="typeahead form-control w-100" placeholder="Search..."
+                                                    name="s_query" id="search" >
                                             </div>
-                                            <div class="col ps-1">
-                                                <button class="btn btn-primary w-100" type="button" id="filter_btn">Apply
-                                                    Filter</button>
-
-                                            </div>
+                                           
+                                            <script type="text/javascript">
+                                                 public function autocomplete(Request $request)
+    {
+        $data = User::select("title")
+                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')
+                    ->get();
+     
+        return response()->json($data);
+    }
+                                            </script>
         <table class="table table-bordered">
             <thead>
                 <tr>
