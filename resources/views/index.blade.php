@@ -6,6 +6,8 @@
      <meta name="viewport" content="width=device-width, initial-scale=1">
    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 </head>
 <body>
     <div class="container mt-2">
@@ -25,20 +27,36 @@
             </div>
         @endif
                      <div class="col px-1">
-                                                <input type="search" class="typeahead form-control w-100" placeholder="Search..."
-                                                    name="s_query" id="search" >
-                                            </div>
-                                           
-                                            <script type="text/javascript">
-                                                 public function autocomplete(Request $request)
-    {
-        $data = User::select("title")
-                    ->where('title', 'LIKE', '%'. $request->get('query'). '%')
-                    ->get();
-     
-        return response()->json($data);
-    }
-                                            </script>
+                                <input type="search" class="typeahead form-control w-100" placeholder="Search..."
+                                                   id="search" >
+                     </div>
+    <script type="text/javascript">
+   var path = "{{ route('autocomplete') }}";
+  
+    $('#search').typeahead({
+            source: function (query, process) {
+                return $.get(path, {
+                    query: query
+                }, function (data) {
+                    
+                    
+                      var res='';
+            $.each (data, function (key, value) {
+            res +=
+            '<tr>'+
+                '<td>'+value.id+'</td>'+
+                '<td>'+value.title+'</td>'+
+                '<td>'+value.author+'</td>'+
+                '<td>'+value.created_at+'</td>'+
+                
+           '</tr>';
+
+   });
+ $('tbody').html(res);
+                });
+            }
+        });
+</script>                                           
         <table class="table table-bordered">
             <thead>
                 <tr>
