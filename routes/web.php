@@ -17,3 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('product', productController::class);
+Route::controller(productController::class)->group(function(){
+     //Route::post('searchdata', 'searchdata')->name('searchdata');
+    Route::get('autocomplete', 'autocomplete')->name('autocomplete');
+});
